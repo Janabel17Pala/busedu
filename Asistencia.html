@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Asistencia - BusEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #5B21B6;
+            --color-secondary: #8B5CF6;
+            --color-accent: #A78BFA;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        .logo-container { display: flex; align-items: center; }
+        .logo-wolf-icon { width: 24px; height: 24px; color: var(--color-accent); margin-right: 0.25rem; }
+        .logo-text { color: var(--color-primary); font-weight: 800; font-size: 1.5rem; line-height: 1; }
+
+        .btn-acceder { background-color: var(--color-primary); }
+        .btn-acceder:hover { background-color: #4c1d95; }
+
+        .user-dropdown-container { position: relative; }
+        .user-menu { position: absolute; top: 100%; right: 0; width: 150px; z-index: 20; }
+
+        .btn-registrar { background-color: var(--color-secondary); }
+        .btn-registrar:hover { background-color: var(--color-primary); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<header class="bg-white shadow-lg sticky top-0 z-10 border-b-4 border-purple-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="logo-container hover:opacity-80 transition duration-150">
+                <svg class="logo-wolf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    <path d="M19 19c-3.1 0-5.9-1.3-8-3.4 2.1-2.1 4.9-3.4 8-3.4a9 9 0 0 1 0 6z"/>
+                    <path d="M13 10l-1-1 4-4 1 1-4 4z"/>
+                    <path d="M1 1v1h3v18H1v1h22V1H1z"/>
+                    <path d="M8 20l-1-1 3-3 1 1-3 3z"/>
+                </svg>
+                <div class="logo-text">BusEdu</div>
+            </a>        <nav class="hidden md:flex space-x-6 items-center" id="main-nav-desktop">
+            <a href="index.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Inicio</a>
+                <a href="Estudiantes.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Estudiantes</a>
+            <a href="rutas.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Rutas</a>
+            <a href="asistencia.html" class="nav-link text-purple-700 font-bold transition duration-150 p-2 rounded-lg border-b-2 border-purple-700">Asistencia</a>
+            <div id="auth-status-desktop">
+                <a href="Login.php" class="btn-acceder text-white px-4 py-2 rounded-full font-semibold transition duration-150 hover:shadow-md">Acceder</a>
+            </div>
+        </nav>
+
+        <button id="menu-button" class="md:hidden text-gray-600 hover:text-purple-600 focus:outline-none p-2 rounded-lg transition duration-150">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="index.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Inicio</a>
+            <a href="estudiantes.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Rutas</a>
+            <a href="asistencia.html" class="nav-link block px-3 py-2 rounded-md text-base font-bold text-purple-700 bg-purple-50">Asistencia</a>
+            <div id="auth-status-mobile" class="pt-2 border-t border-gray-100">
+                <a href="Login.php" class="btn-acceder block text-white text-center px-4 py-2 rounded-full font-semibold transition duration-150">Acceder</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+    
+    <h1 class="text-3xl font-bold mb-8 text-gray-800 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 10a2.5 2.5 0 0 0-2.28 1.33L8.85 9.17A2.5 2.5 0 0 0 7 9a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 1.85-1.17l3.37 2.16A2.5 2.5 0 0 0 14.5 15a2.5 2.5 0 0 0 0-5z"/></svg>
+        Registro de Asistencia
+    </h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <section id="form-section" class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg h-fit">
+            <h2 class="text-xl font-semibold mb-6 text-gray-700">Registrar Asistencia de Hoy</h2>
+            
+            <form id="form-attendance">
+                
+                <div class="mb-4">
+                    <label for="student-select" class="block text-sm font-medium text-gray-700 mb-1">Selecciona Estudiante</label>
+                    <select id="student-select" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                        <option value="">Cargando estudiantes...</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <span class="block text-sm font-medium text-gray-700 mb-2">Estado de Asistencia</span>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="status" value="presente" required class="form-radio text-green-600 h-5 w-5 focus:ring-green-500">
+                            <span class="ml-2 text-gray-700">Presente</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="status" value="ausente" required class="form-radio text-red-600 h-5 w-5 focus:ring-red-500">
+                            <span class="ml-2 text-gray-700">Ausente</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="form-message" class="hidden p-3 border-l-4 font-medium text-sm rounded transition duration-300 mb-4"></div>
+
+                <button type="submit" class="btn-registrar w-full text-white font-semibold py-2 rounded-lg transition duration-150 hover:shadow-md">
+                    Confirmar Registro
+                </button>
+            </form>
+        </section>
+
+        <section class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Historial de Asistencia de Hoy</h2>
+
+            <div class="flex justify-between items-center mb-4">
+                <p class="text-sm text-gray-500">Registros hasta el momento.</p>
+                </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estudiante
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Parada
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estado
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fecha
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="4" class="py-4 text-center text-gray-400">Cargando historial...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+    <script src="assets/js/userBadge.js"></script>
+    </body>
+    </html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- LÓGICA SIMPLIFICADA (userBadge.js maneja la insignia y menú) ---
+        const userRole = localStorage.getItem('userRole');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const isAdmin = userRole === 'admin';
+        
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // --- Funcionalidad de Menú Móvil ---
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        // -----------------------------------------------------------------
+
+
+        // --- Funciones de Utilidad ---
+        const formMessage = document.getElementById('form-message');
+        const showMessage = (message, className) => {
+            // Permite marcar texto en **negrita**
+            const parts = message.split('**');
+            let finalHtml = '';
+            parts.forEach((part, index) => {
+                if (index % 2 !== 0) {
+                    finalHtml += `<strong>${part}</strong>`;
+                } else {
+                    finalHtml += part;
+                }
+            });
+
+            formMessage.innerHTML = finalHtml;
+            formMessage.classList.remove('hidden');
+            // Quitar clases previas y añadir las nuevas
+            formMessage.className = 'p-3 border-l-4 font-medium text-sm rounded transition duration-300 mb-4';
+            formMessage.classList.add(...className.split(' '));
+
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 4000);
+        };
+
+        // === LÓGICA DE INTEGRACIÓN CON PHP ===
+        
+        let allStudents = []; // Almacena la lista de estudiantes con sus IDs
+
+        // --- Cargar Estudiantes para el SELECT 
+        const loadStudents = async () => {
+            const studentSelect = document.getElementById('student-select');
+            studentSelect.innerHTML = '<option value="">Cargando estudiantes...</option>';
+            
+            try {
+                // Solicitamos la lista de estudiantes en formato JSON 
+                const response = await fetch('PHP/listar_estudiante.php', { credentials: 'same-origin' }); 
+                if (!response.ok) {
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json(); 
+                
+                if (result.ok) {
+                    allStudents = result.data; // Guardamos la lista con IDs
+                    studentSelect.innerHTML = '<option value="">Selecciona un Estudiante</option>';
+                    
+                    if (allStudents.length === 0) {
+                        studentSelect.innerHTML = '<option value="">No hay estudiantes registrados</option>';
+                        showMessage('No se encontraron estudiantes en la base de datos.', 'bg-yellow-100 text-yellow-800 border-yellow-500');
+                        return;
+                    }
+
+                    allStudents.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.id; // ¡Usamos el ID del estudiante!
+                        option.textContent = `${student.nombre} (${student.parada})`;
+                        studentSelect.appendChild(option);
+                    });
+                } else {
+                    studentSelect.innerHTML = '<option value="">Error al cargar estudiantes</option>';
+                    showMessage(`Error: ${result.msg}`, 'bg-red-100 text-red-800 border-red-500');
+                }
+
+            } catch (error) {
+                console.error('Error al cargar la lista de estudiantes:', error);
+                studentSelect.innerHTML = '<option value="">Error de conexión</option>';
+                showMessage('Error de red al cargar estudiantes. Por favor, revisa tu conexión con el servidor.', 'bg-red-100 text-red-800 border-red-500');
+            }
+        };
+
+        // --- Obtener y Renderizar el Historial de Asistencia de Hoy (Desde listar_asistencia.php - JSON) ---
+        const renderHistory = async () => {
+            const historyBody = document.getElementById('history-body');
+            historyBody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-gray-400">Cargando historial...</td></tr>';
+            
+            try {
+                const response = await fetch('PHP/listar_asistencia.php', { credentials: 'same-origin' }); 
+                if (!response.ok) {
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json(); 
+
+                if (result.ok && result.data.length > 0) {
+                    historyBody.innerHTML = ''; // Limpiar el mensaje de carga
+                    result.data.forEach(att => {
+                        const row = document.createElement('tr');
+                        // Determinar clases y texto basado en el estado
+                        const statusClass = att.estado === 'presente' ? 'bg-green-100 text-green-800 border-green-500' : 'bg-red-100 text-red-800 border-red-500';
+                        const statusText = att.estado === 'presente' ? 'Presente' : 'Ausente';
+                        
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${att.estudiante_nombre}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${att.parada}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                    ${statusText}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${att.fecha} a las ${att.hora}</td>
+                        `;
+                        historyBody.appendChild(row);
+                    });
+                } else {
+                     historyBody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-gray-500 italic">No hay registros de asistencia para hoy.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Error al cargar el historial de asistencia:', error);
+                historyBody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-red-500">Error al cargar historial. Verifica la conexión con el servidor.</td></tr>';
+            }
+        };
+
+
+        // --- Registrar Asistencia (A registrar_asistencia.php) ---
+        const registerAttendance = async (studentId, status) => {
+            // Buscar el nombre del estudiante para el mensaje de confirmación
+            const student = allStudents.find(s => s.id == studentId);
+            const studentName = student ? student.nombre : 'Estudiante Desconocido';
+            const statusText = status === 'presente' ? 'Presente' : 'Ausente';
+            
+            const formData = new FormData();
+            formData.append('estudiante_id', studentId);
+            formData.append('estado', status);
+
+            try {
+                const response = await fetch('PHP/registrar_asistencia.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                const result = await response.json(); 
+                
+                if (response.ok && result.ok) {
+                    showMessage(`Asistencia registrada para **${studentName}**: **${statusText}**`, 'bg-purple-100 text-purple-800 border-purple-500');
+                    await renderHistory(); // Actualizar el historial
+                } else {
+                    showMessage(`Error al registrar asistencia de **${studentName}**: ${result.msg || 'Error desconocido'}`, 'bg-red-100 text-red-800 border-red-500');
+                }
+            } catch (error) {
+                console.error('Error en la conexión con el servidor:', error);
+                showMessage('Error de red al registrar asistencia. Por favor, revisa tu conexión o el servidor.', 'bg-red-100 text-red-800 border-red-500');
+            }
+        };
+
+        // --- Listener del Formulario ---
+        document.getElementById('form-attendance').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('student-select').value;
+            const status = document.querySelector('input[name="status"]:checked')?.value;
+
+            if (!studentId || !status) {
+                showMessage('Por favor, selecciona un estudiante y un estado de asistencia.', 'bg-yellow-100 text-yellow-800 border-yellow-500');
+                return;
+            }
+            
+            registerAttendance(studentId, status);
+        });
+        
+
+        // Cargar datos al inicio
+        loadStudents();
+        renderHistory();
+
+        // --- Restricción de Rol: Solo usuarios logueados y Admin pueden registrar asistencia ---
+        const formSection = document.getElementById('form-section');
+        if (!isLoggedIn || !isAdmin) {
+            formSection.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

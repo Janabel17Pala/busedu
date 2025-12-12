@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusEdu - Sistema de Transporte Escolar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Definición de la nueva paleta de colores: Morado y Blanco */
+        :root {
+            --color-primary: #5B21B6; /* Morado Oscuro (Indigo 700) */
+            --color-secondary: #8B5CF6; /* Morado Medio (Violet 500) */
+            --color-accent: #A78BFA; /* Morado Claro (Violet 400) - para acentos */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Fondo blanco */
+            color: #1f2937; /* Texto oscuro */
+        }
+        /* LOGO con el nuevo tamaño */
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-text {
+            color: var(--color-primary);
+            font-weight: 900; /* Más grueso */
+            font-size: 2rem; /* Más grande */
+            line-height: 1; /* Para alinear con el icono */
+            margin-left: 0.5rem;
+        }
+        /* Estilo para el icono del lobo */
+        .logo-wolf-icon {
+            width: 32px;
+            height: 32px;
+            color: var(--color-accent); /* Color morado claro para el lobo */
+        }
+        /* Estilo para el botón de Acceder que usa la variable CSS */
+        .btn-acceder {
+            background-color: #5B21B6; 
+        }
+        .btn-acceder:hover {
+            background-color: #4c1d95; /* Indigo 800 */
+        }
+        
+        /* ESTILOS AÑADIDOS PARA LA LÓGICA DE SESIÓN */
+        .user-dropdown-container {
+            position: relative;
+        }
+        .user-menu {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            width: 150px;
+            z-index: 20;
+        }
+        /* CLASE INICIAL PARA OCULTAR EL BOTÓN POR DEFECTO */
+        .hidden-cta {
+             display: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-lg sticky top-0 z-10 border-b-4 border-purple-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="logo-container">
+                <svg class="logo-wolf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    <path d="M19 19c-3.1 0-5.9-1.3-8-3.4 2.1-2.1 4.9-3.4 8-3.4a9 9 0 0 1 0 6z"/>
+                    <path d="M13 10l-1-1 4-4 1 1-4 4z"/>
+                    <path d="M1 1v1h3v18H1v1h22V1H1z"/>
+                    <path d="M8 20l-1-1 3-3 1 1-3 3z"/>
+                </svg>
+                <div class="logo-text">BusEdu</div>
+            </div>
+
+            <nav class="hidden md:flex space-x-6 items-center" id="main-nav-desktop">
+                <a href="index.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Inicio</a>
+                <a href="Estudiantes.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Rutas</a>
+                <a href="Asistencia.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Asistencia</a>
+
+                <div id="auth-status-desktop"></div>
+            </nav>
+
+            <button id="menu-button" class="md:hidden text-gray-600 hover:text-purple-600 focus:outline-none p-2 rounded-lg transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 pb-2">
+            <a href="index.html" class="nav-link-mobile block px-4 py-2 text-gray-700 hover:bg-purple-50 font-medium transition duration-150">Inicio</a>
+            <a href="Estudiantes.html" class="nav-link-mobile block px-4 py-2 text-gray-700 hover:bg-purple-50 font-medium transition duration-150">Estudiantes</a>
+            <a href="Rutas.html" class="nav-link-mobile block px-4 py-2 text-gray-700 hover:bg-purple-50 font-medium transition duration-150">Rutas</a>
+            <a href="Asistencia.html" class="nav-link-mobile block px-4 py-2 text-gray-700 hover:bg-purple-50 font-medium transition duration-150">Asistencia</a>
+            
+            <div id="auth-status-mobile"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                
+                <div class="space-y-6">
+                    <p class="text-sm font-semibold uppercase tracking-wider text-purple-600">
+                        Innovación y seguridad
+                    </p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+                        <span class="text-indigo-700">El viaje escolar</span> que inspira confianza
+                    </h1>
+                    <p class="text-xl text-gray-600 max-w-lg">
+                        BusEdu transforma la gestión del transporte, ofreciendo tranquilidad a los padres y optimización para la escuela. ¡Cada estudiante, seguro y a tiempo!
+                    </p>
+                    
+                    <div id="hero-cta-container" class="hidden-cta">
+                        <a href="rutas.html" class="inline-block px-6 py-3 font-bold text-white bg-purple-500 rounded-full shadow-xl hover:bg-purple-600 transition duration-300 ease-in-out transform hover:scale-[1.03] text-xl">
+                            Comenzar →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl ring-4 ring-purple-500/50">
+                    <img 
+                        src="img/Autobus.jpg" 
+                        alt="Autobús escolar amarillo moderno y seguro de BusEdu" 
+                        class="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
+                    >
+                    <div class="absolute inset-0 bg-indigo-900 opacity-10"></div>
+                </div>
+
+            </div>
+        </section>
+        
+        <section class="bg-indigo-50 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-12">
+                    Nuestras Funcionalidades Clave
+                </h2>
+                
+                <div class="grid md:grid-cols-4 gap-8">
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center transform hover:translate-y-[-5px] transition duration-300 border-b-4 border-purple-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto text-purple-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <h3 class="font-bold text-xl mb-2 text-indigo-700">Seguimiento GPS</h3>
+                        <p class="text-gray-500 text-sm">Ubica el autobús en vivo. Tranquilidad para los padres, siempre.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center transform hover:translate-y-[-5px] transition duration-300 border-b-4 border-purple-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto text-purple-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3h8v4"/><path d="M16 21V7H8v14z"/><path d="M12 11h0"/><path d="M12 15h0"/></svg>
+                        <h3 class="font-bold text-xl mb-2 text-indigo-700">Registro Asistencia</h3>
+                        <p class="text-gray-500 text-sm">Entrada y salida segura con registros digitales.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center transform hover:translate-y-[-5px] transition duration-300 border-b-4 border-purple-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto text-purple-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14c1 0 1 1 1 2v2.5"/><path d="M22 13h-4v-4"/><path d="m18 13-4 4 4 4"/></svg>
+                        <h3 class="font-bold text-xl mb-2 text-indigo-700">Rutas Inteligentes</h3>
+                        <p class="text-gray-500 text-sm">Ahorra tiempo y combustible con rutas optimizadas.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center transform hover:translate-y-[-5px] transition duration-300 border-b-4 border-purple-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto text-purple-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8L3 21z"/></svg>
+                        <h3 class="font-bold text-xl mb-2 text-indigo-700">Notificaciones</h3>
+                        <p class="text-gray-500 text-sm">Alertas automáticas de llegada y salida para los padres.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-indigo-900 text-white mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p class="text-lg font-semibold mb-2">BusEdu: La Solución para el Transporte Educativo</p>
+            <p class="text-sm text-indigo-300">© 2025 BusEdu — Desarrollado con amor por Anabel. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/userBadge.js"></script>
+    <script>
+        // --- Variables de Estado y Roles ---
+        const userRole = localStorage.getItem('userRole');
+        const isAdmin = userRole === 'admin';
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        // --- Lógica del CTA (Botón Comenzar) ---
+        const checkLoginStatus = () => {
+            const heroCta = document.getElementById('hero-cta-container'); 
+            
+            // Lógica del Botón CTA (Comienza tu Prueba Gratuita)
+            if (heroCta) {
+                if (isLoggedIn && isAdmin) {
+                    // Si es Admin, mostramos el botón.
+                    heroCta.classList.remove('hidden-cta');
+                    heroCta.style.display = 'block'; 
+                } else {
+                    // Si es Usuario o no está logueado, ocultamos el botón.
+                    heroCta.classList.add('hidden-cta');
+                    heroCta.style.display = 'none'; 
+                }
+            }
+        };
+
+
+        // --- Lógica del Enlace Activo y Menú Móvil ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus(); // Llamada para manejar el CTA
+
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const desktopLinks = document.querySelectorAll('#main-nav-desktop .nav-link');
+            const mobileLinks = document.querySelectorAll('#mobile-menu .nav-link-mobile');
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html'; 
+
+            // 1. Alternar Menú Móvil
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // 2. Resaltar Enlace Activo
+            const setActiveLink = (linkElements) => {
+                linkElements.forEach(link => {
+                    const linkPath = link.getAttribute('href').split('/').pop(); 
+                    
+                    if (linkPath === currentPath) {
+                        // Resaltar para Escritorio
+                        link.classList.remove('text-gray-600', 'hover:text-purple-600', 'font-semibold');
+                        link.classList.add('text-purple-700', 'font-bold', 'border-b-2', 'border-purple-700');
+                        
+                        // Resaltar para Móvil
+                        link.classList.remove('text-gray-700', 'hover:bg-purple-50'); 
+                        link.classList.add('text-purple-700', 'font-bold', 'bg-purple-50');
+                    } else if (link.parentElement.id === 'auth-status-desktop' || link.parentElement.id === 'auth-status-mobile') {
+                        // Ignorar los elementos del estado de autenticación
+                    } else {
+                        // Resetear estilos inactivos
+                        link.classList.add('text-gray-600', 'hover:text-purple-600', 'font-semibold');
+                        link.classList.remove('text-purple-700', 'font-bold', 'border-b-2', 'border-purple-700', 'bg-purple-50');
+                    }
+                });
+            };
+
+            setActiveLink(desktopLinks);
+            setActiveLink(mobileLinks);
+        });
+    </script>
+
+</body>
+</html>

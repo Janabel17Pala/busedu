@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutas - BusEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-primary: #5B21B6; /* Morado Oscuro (Indigo 700) */
+            --color-secondary: #8B5CF6; /* Morado Medio (Violet 500) */
+            --color-accent: #A78BFA; /* Morado Claro (Violet 400) - para acentos */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; 
+            color: #1f2937;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-wolf-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--color-accent); 
+            margin-right: 0.25rem;
+        }
+        .logo-text {
+            color: var(--color-primary);
+            font-weight: 800; 
+            font-size: 1.5rem; 
+            line-height: 1; 
+        }
+
+        .btn-acceder {
+            background-color: var(--color-primary);
+        }
+        .btn-acceder:hover {
+            background-color: #4c1d95; /* Indigo 800 */
+        }
+
+        .user-dropdown-container {
+            position: relative;
+        }
+        .user-menu {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            width: 150px;
+            z-index: 20;
+        }
+        
+        /* Estilo para el botón de Guardar/Editar */
+        .btn-guardar {
+            background-color: var(--color-secondary);
+        }
+        .btn-guardar:hover {
+            background-color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-lg sticky top-0 z-10 border-b-4 border-purple-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <a href="index.html" class="logo-container hover:opacity-80 transition duration-150">
+                <svg class="logo-wolf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    <path d="M19 19c-3.1 0-5.9-1.3-8-3.4 2.1-2.1 4.9-3.4 8-3.4a9 9 0 0 1 0 6z"/>
+                    <path d="M13 10l-1-1 4-4 1 1-4 4z"/>
+                    <path d="M1 1v1h3v18H1v1h22V1H1z"/>
+                    <path d="M8 20l-1-1 3-3 1 1-3 3z"/>
+                </svg>
+                <div class="logo-text">BusEdu</div>
+            </a>
+
+            <nav class="hidden md:flex space-x-6 items-center" id="main-nav-desktop">
+                <a href="index.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Inicio</a>
+                <a href="Estudiantes.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link text-purple-700 font-bold transition duration-150 p-2 rounded-lg border-b-2 border-purple-700">Rutas</a>
+                <a href="asistencia.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Asistencia</a>
+                <div id="auth-status-desktop">
+                    <a href="Login.php" class="btn-acceder text-white px-4 py-2 rounded-full font-semibold transition duration-150 hover:shadow-md">Acceder</a>
+                </div>
+            </nav>
+
+            <button id="menu-button" class="md:hidden text-gray-600 hover:text-purple-600 focus:outline-none p-2 rounded-lg transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Inicio</a>
+                <a href="estudiantes.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link block px-3 py-2 rounded-md text-base font-bold text-purple-700 bg-purple-50">Rutas</a>
+                <a href="asistencia.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Asistencia</a>
+                <div id="auth-status-mobile" class="pt-2 border-t border-gray-100">
+                    <a href="Login.php" class="btn-acceder block text-white text-center px-4 py-2 rounded-full font-semibold transition duration-150">Acceder</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <h1 class="text-3xl font-bold mb-8 text-gray-800 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12zm-4-10H6M10 6h4m4 8h-4"/></svg>
+            Gestión de Rutas
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="management-grid">
+
+            <section id="form-section" class="bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h2 class="text-xl font-semibold mb-6 text-gray-700 flex items-center" id="form-title">
+                    Crear Nueva Ruta
+                </h2>
+                
+                <form id="route-form" method="POST">
+                    
+                    <input type="hidden" id="route-index" value="-1">
+
+                    <div class="mb-4">
+                        <label for="reg-nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Ruta</label>
+                        <input type="text" id="reg-nombre" name="nombre" placeholder="Ej: Ruta 1 - Los Prados" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="reg-conductor" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Conductor</label>
+                        <input type="text" id="reg-conductor" name="conductor" placeholder="Ej: Ramón Valdez" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="reg-paradas" class="block text-sm font-medium text-gray-700 mb-1">Número de Paradas</label>
+                        <input type="number" id="reg-paradas" name="paradas" placeholder="Ej: 10" required min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    </div>
+
+                    <button type="submit" id="form-button" class="btn-guardar w-full text-white font-semibold py-2 rounded-lg transition duration-150 hover:shadow-md">
+                        Guardar Ruta
+                    </button>
+                    <button type="button" id="cancel-edit-btn" class="w-full text-gray-600 font-semibold py-2 mt-2 rounded-lg transition duration-150 hover:bg-gray-100 hidden">
+                        Cancelar Edición
+                    </button>
+                </form>
+            </section>
+
+            <section class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Rutas Disponibles</h2>
+                
+                <div class="space-y-3" id="route-list">
+                    <p class="text-center p-8 text-gray-400">Cargando rutas...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+       <script src="assets/js/userBadge.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- LÓGICA DE SESIÓN ---
+        const userRole = localStorage.getItem('userRole');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const isAdmin = userRole === 'admin';
+        
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // --- Funcionalidad de Menú Móvil ---
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        // -----------------------------------------------------------------
+
+        // === ELEMENTOS DEL FORMULARIO Y GESTIÓN DE ESTADO ===
+        const form = document.getElementById('route-form');
+        const formButton = document.getElementById('form-button');
+        const formTitle = document.getElementById('form-title');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const routeIndexInput = document.getElementById('route-index'); // Contiene el ID de la ruta a editar, o '-1' para registro
+        const formSection = document.getElementById('form-section');
+
+        const nombreInput = document.getElementById('reg-nombre');
+        const conductorInput = document.getElementById('reg-conductor');
+        const paradasInput = document.getElementById('reg-paradas');
+        
+        // Función para resetear el formulario a modo "Registro"
+        const resetForm = () => {
+            form.reset();
+            routeIndexInput.value = '-1';
+            cancelEditBtn.classList.add('hidden');
+            formButton.textContent = 'Guardar Ruta';
+            formTitle.innerHTML = `Crear Nueva Ruta`;
+        };
+
+        // Event listener para el botón de Cancelar Edición
+        cancelEditBtn.addEventListener('click', resetForm);
+
+        // Función para adjuntar Event Listeners a los botones de Edit/Delete
+        const handleActions = () => {
+            if (!isAdmin) return; 
+
+            const listContainer = document.getElementById('route-list');
+            
+            // 1. Manejo del botón ELIMINAR
+            // Clonar y reemplazar para evitar duplicidad de listeners si se llama varias veces a handleActions
+            listContainer.querySelectorAll('.delete-btn').forEach(button => {
+                button.replaceWith(button.cloneNode(true)); 
+            });
+            document.querySelectorAll('#route-list .delete-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const nombre = e.currentTarget.dataset.nombre;
+                    
+                    if (!confirm(`¿Estás seguro de que quieres eliminar la ruta: ${nombre}? Esta acción es irreversible.`)) {
+                        return;
+                    }
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('id', id);
+
+                        // Llama al script PHP de eliminación
+                        const response = await fetch('PHP/eliminar_ruta.php', {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'same-origin'
+                        });
+
+                        const result = await response.json(); 
+                        
+                        if (response.ok && result.ok) {
+                            alert(`${nombre} eliminada con éxito.`);
+                            await renderRoutes(); // Recargar la lista
+                            resetForm();
+                        } else {
+                            alert(`Error al eliminar: ${result.msg || 'Error desconocido'}`);
+                        }
+                    } catch (error) {
+                        console.error('Error de red al eliminar:', error);
+                        alert('Error de red al intentar eliminar la ruta. Por favor, revisa tu conexión o el servidor.');
+                    }
+                });
+            });
+
+            // 2. Manejo del botón EDITAR (Carga los datos en el formulario)
+            listContainer.querySelectorAll('.edit-btn').forEach(button => {
+                button.replaceWith(button.cloneNode(true)); 
+            });
+            document.querySelectorAll('#route-list .edit-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const nombre = e.currentTarget.dataset.nombre;
+                    const conductor = e.currentTarget.dataset.conductor;
+                    const paradas = e.currentTarget.dataset.paradas;
+
+                    // Poner el formulario en modo edición
+                    routeIndexInput.value = id;
+                    nombreInput.value = nombre;
+                    conductorInput.value = conductor;
+                    paradasInput.value = paradas;
+                    
+                    formTitle.innerHTML = `Editando Ruta: **${nombre}**`;
+                    formButton.textContent = 'Actualizar Ruta';
+                    cancelEditBtn.classList.remove('hidden');
+                    
+                    // Mueve la vista al formulario
+                    window.scrollTo({ top: formSection.offsetTop - 20, behavior: 'smooth' });
+                });
+            });
+        };
+        
+
+        // Función para obtener la lista de rutas desde el servidor (HTML)
+        const renderRoutes = async () => {
+            const listContainer = document.getElementById('route-list');
+            listContainer.innerHTML = '<p class="text-center p-8 text-gray-400">Cargando rutas...</p>';
+            
+            try {
+                // Solicitamos la lista de rutas en formato HTML
+                const response = await fetch('PHP/listar_ruta.php?format=html', { credentials: 'same-origin' });
+                if (!response.ok) {
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const htmlContent = await response.text();
+                listContainer.innerHTML = htmlContent;
+                
+                //  Después de renderizar el HTML, adjuntar los listeners de los botones (solo si es admin)
+                if(isAdmin) {
+                    handleActions(); 
+                }
+
+            } catch (error) {
+                console.error('Error al cargar la lista de rutas:', error);
+                listContainer.innerHTML = '<p class="text-center p-8 text-red-500">Error al cargar rutas. Verifica la conexión con el servidor.</p>';
+            }
+        };
+        
+
+        // --- Lógica del Formulario: Registrar o Actualizar (UNIFICADA) ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!isAdmin) {
+                alert('Acceso no autorizado para esta acción.');
+                return;
+            }
+
+            const id = routeIndexInput.value;
+            const isEditing = id !== '-1'; // Determina si estamos editando o registrando
+            
+            const nombre = nombreInput.value.trim();
+            const conductor = conductorInput.value.trim();
+            const paradas = parseInt(paradasInput.value.trim());
+
+            if (!nombre || !conductor || isNaN(paradas) || paradas <= 0) {
+                alert('Por favor, completa todos los campos correctamente.');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('conductor', conductor);
+            formData.append('paradas', paradas);
+
+            let endpoint = 'PHP/registrar_ruta.php';
+            let successMessage = `Ruta ${nombre} registrada con éxito!`;
+            let actionText = 'Guardando...';
+
+            if (isEditing) {
+                endpoint = 'PHP/editar_ruta.php'; // Endpoint de edición
+                formData.append('id', id); // Incluye el ID para la actualización
+                successMessage = `Ruta ${nombre} actualizada con éxito!`;
+                actionText = 'Actualizando...';
+            }
+
+            const originalButtonText = formButton.textContent;
+            formButton.textContent = actionText;
+            formButton.disabled = true;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                // Manejo del error 403 (Acceso no autorizado)
+                if (response.status === 403) {
+                     const errorResult = await response.json();
+                     alert(`Error de autenticación: ${errorResult.msg}. Por favor, vuelve a iniciar sesión.`);
+                     return;
+                }
+
+                const result = await response.json(); 
+                
+                if (response.ok && result.ok) {
+                    alert(successMessage);
+                    resetForm(); 
+                    await renderRoutes(); // Actualizar la lista
+                } else {
+                    alert(`Error: ${result.msg || 'Error desconocido'}`);
+                }
+            } catch (error) {
+                console.error('Error en la conexión con el servidor:', error);
+                alert('Error de red al intentar comunicarse con el servidor.');
+            } finally {
+                formButton.textContent = originalButtonText;
+                formButton.disabled = false;
+            }
+        });
+
+        // === LÓGICA DE RESTRICCIÓN DE ACCESO Y LAYOUT ===
+        const managementGrid = document.getElementById('management-grid');
+        
+        // Si el usuario NO está logueado O NO es Admin, ocultamos el formulario y ajustamos la cuadrícula
+        if (!isLoggedIn || !isAdmin) {
+            formSection.style.display = 'none';
+            managementGrid.classList.remove('md:grid-cols-2');
+            managementGrid.classList.add('md:grid-cols-1');
+        }
+
+
+        // Cargar rutas al inicio
+        renderRoutes();
+    });
+</script>

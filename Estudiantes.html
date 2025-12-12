@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudiantes - BusEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Definición de la paleta de colores */
+        :root {
+            --color-primary: #5B21B6; /* Morado Oscuro (Indigo 700) */
+            --color-secondary: #8B5CF6; /* Morado Medio (Violet 500) */
+            --color-accent: #A78BFA; /* Morado Claro (Violet 400) - para acentos */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Fondo blanco ligeramente grisáceo */
+            color: #1f2937;
+        }
+
+        /* Estilos del Logo */
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-wolf-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--color-accent); 
+            margin-right: 0.25rem;
+        }
+        .logo-text {
+            color: var(--color-primary);
+            font-weight: 800; 
+            font-size: 1.5rem; 
+            line-height: 1; 
+        }
+
+        /* Estilo para el botón de Acceder */
+        .btn-acceder {
+            background-color: var(--color-primary);
+        }
+        .btn-acceder:hover {
+            background-color: #4c1d95; /* Indigo 800 */
+        }
+
+        /* ESTILOS AÑADIDOS PARA LA LÓGICA DE SESIÓN (IDÉNTICOS A INDEX.HTML) */
+        .user-dropdown-container {
+            position: relative;
+        }
+        .user-menu {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            width: 150px;
+            z-index: 20;
+        }
+
+        /* Estilo para el botón de Guardar/Editar */
+        .btn-guardar {
+            background-color: var(--color-secondary);
+        }
+        .btn-guardar:hover {
+            background-color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-lg sticky top-0 z-10 border-b-4 border-purple-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <a href="index.html" class="logo-container hover:opacity-80 transition duration-150">
+                <svg class="logo-wolf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    <path d="M19 19c-3.1 0-5.9-1.3-8-3.4 2.1-2.1 4.9-3.4 8-3.4a9 9 0 0 1 0 6z"/>
+                    <path d="M13 10l-1-1 4-4 1 1-4 4z"/>
+                    <path d="M1 1v1h3v18H1v1h22V1H1z"/>
+                    <path d="M8 20l-1-1 3-3 1 1-3 3z"/>
+                </svg>
+                <div class="logo-text">BusEdu</div>
+            </a>
+
+            <nav class="hidden md:flex space-x-6 items-center" id="main-nav-desktop">
+                <a href="index.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Inicio</a>
+                <a href="estudiantes.html" class="nav-link text-purple-700 font-bold transition duration-150 p-2 rounded-lg border-b-2 border-purple-700">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Rutas</a>
+                <a href="asistencia.html" class="nav-link text-gray-600 hover:text-purple-600 font-semibold transition duration-150 p-2 rounded-lg">Asistencia</a>
+                <div id="auth-status-desktop"></div>
+            </nav>
+
+            <button id="menu-button" class="md:hidden text-gray-600 hover:text-purple-600 focus:outline-none p-2 rounded-lg transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Inicio</a>
+                <a href="estudiantes.html" class="nav-link block px-3 py-2 rounded-md text-base font-bold text-purple-700 bg-purple-50">Estudiantes</a>
+                <a href="Rutas.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Rutas</a>
+                <a href="asistencia.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-purple-50">Asistencia</a>
+                <div id="auth-status-mobile" class="pt-2 border-t border-gray-100"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <h1 class="text-3xl font-bold mb-8 text-gray-800 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 10h-6"/><path d="M19 7v6"/></svg>
+            Gestión de Estudiantes
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="management-grid">
+
+            <section id="form-section" class="bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h2 class="text-xl font-semibold mb-6 text-gray-700 flex items-center" id="form-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 10h-6"/><path d="M19 7v6"/></svg>
+                    Registrar Nuevo Estudiante
+                </h2>
+                
+                <form id="student-form" method="POST">
+                    
+                    <input type="hidden" id="student-index" value="-1">
+
+                    <div class="mb-4">
+                        <label for="reg-nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                        <input type="text" id="reg-nombre" name="nombre" placeholder="Ej: Sofía Martínez" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="reg-parada" class="block text-sm font-medium text-gray-700 mb-1">Parada Asignada</label>
+                        <input type="text" id="reg-parada" name="parada" placeholder="Ej: Calle 5, Esquina Av. Central" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 transition duration-150">
+                    </div>
+
+                    <button type="submit" id="form-button" class="btn-guardar w-full text-white font-semibold py-2 rounded-lg transition duration-150 hover:shadow-md">
+                        Guardar Estudiante
+                    </button>
+                    <button type="button" id="cancel-edit-btn" class="w-full text-gray-600 font-semibold py-2 mt-2 rounded-lg transition duration-150 hover:bg-gray-100 hidden">
+                        Cancelar Edición
+                    </button>
+                </form>
+            </section>
+
+            <section class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Lista de Estudiantes Registrados</h2>
+                
+                <div class="space-y-3" id="student-list">
+                    <p class="text-center p-8 text-gray-400">Cargando estudiantes...</p>
+                </div>
+
+                <div id="no-students-message" class="hidden">
+                    <p class="text-center p-8 bg-purple-50 border-2 border-dashed border-purple-200 rounded-lg text-purple-600 italic">No hay estudiantes registrados aún. ¡Usa el formulario para empezar!</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="assets/js/userBadge.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- LÓGICA DE SESIÓN ---
+            const userRole = localStorage.getItem('userRole');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const isAdmin = userRole === 'admin';
+            
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // --- Funcionalidad de Menú Móvil ---
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // -----------------------------------------------------------------
+
+            // === ELEMENTOS DEL FORMULARIO Y GESTIÓN DE ESTADO ===
+
+            const form = document.getElementById('student-form');
+            const formButton = document.getElementById('form-button');
+            const formTitle = document.getElementById('form-title');
+            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+            const studentIndexInput = document.getElementById('student-index'); // Contiene el ID del estudiante a editar, o '-1' para registro
+            const formSection = document.getElementById('form-section');
+            
+            // Función para resetear el formulario a modo "Registro"
+            const resetForm = () => {
+                form.reset();
+                studentIndexInput.value = '-1';
+                cancelEditBtn.classList.add('hidden');
+                formButton.textContent = 'Guardar Estudiante';
+                formTitle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 10h-6"/><path d="M19 7v6"/></svg> Registrar Nuevo Estudiante`;
+            };
+
+            // Event listener para el botón de Cancelar Edición
+            cancelEditBtn.addEventListener('click', resetForm);
+
+            // Función para adjuntar Event Listeners a los botones de Edit/Delete
+            const handleActions = () => {
+                if (!isAdmin) return; 
+
+                const listContainer = document.getElementById('student-list');
+                
+                // 1. Manejo del botón ELIMINAR (Delega en el contenedor)
+                listContainer.querySelectorAll('.delete-btn').forEach(button => {
+                    button.replaceWith(button.cloneNode(true)); // Previene duplicidad de listeners
+                });
+                document.querySelectorAll('#student-list .delete-btn').forEach(button => {
+                    button.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const nombre = e.currentTarget.dataset.nombre;
+                        
+                        if (!confirm(`¿Estás seguro de que quieres eliminar al estudiante: ${nombre}? Esta acción es irreversible.`)) {
+                            return;
+                        }
+
+                        try {
+                            const formData = new FormData();
+                            formData.append('id', id);
+
+                            const response = await fetch('PHP/eliminar_estudiante.php', {
+                                method: 'POST',
+                                body: formData,
+                                credentials: 'same-origin'
+                            });
+
+                            const result = await response.json();
+                            
+                            if (response.ok && result.ok) {
+                                alert(`${nombre} eliminado con éxito.`);
+                                await renderStudents(); 
+                                resetForm();
+                            } else {
+                                alert(`Error al eliminar: ${result.msg || 'Error desconocido'}`);
+                            }
+                        } catch (error) {
+                            console.error('Error de red al eliminar:', error);
+                            alert('Error de red al intentar eliminar al estudiante.');
+                        }
+                    });
+                });
+
+                // 2. Manejo del botón EDITAR (Carga los datos en el formulario)
+                listContainer.querySelectorAll('.edit-btn').forEach(button => {
+                    button.replaceWith(button.cloneNode(true)); // Previene duplicidad de listeners
+                });
+                document.querySelectorAll('#student-list .edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const nombre = e.currentTarget.dataset.nombre;
+                        const parada = e.currentTarget.dataset.parada;
+
+                        // Poner el formulario en modo edición
+                        studentIndexInput.value = id;
+                        document.getElementById('reg-nombre').value = nombre;
+                        document.getElementById('reg-parada').value = parada;
+                        
+                        formTitle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 10h-6"/><path d="M19 7v6"/></svg> Editando: ${nombre}`;
+                        formButton.textContent = 'Actualizar Estudiante';
+                        cancelEditBtn.classList.remove('hidden');
+                        
+                        // Mueve la vista al formulario para facilitar la edición
+                        window.scrollTo({ top: formSection.offsetTop - 20, behavior: 'smooth' });
+                    });
+                });
+            };
+            
+
+            // Función para obtener la lista de estudiantes desde el servidor (HTML)
+            const renderStudents = async () => {
+                const listContainer = document.getElementById('student-list');
+                const noStudentsMessage = document.getElementById('no-students-message');
+                listContainer.innerHTML = '<p class="text-center p-8 text-gray-400">Cargando estudiantes...</p>';
+                noStudentsMessage.classList.add('hidden');
+                
+                try {
+                    const response = await fetch('PHP/listar_estudiante.php?format=html');
+                    if (!response.ok) {
+                         throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    let htmlContent = await response.text();
+                    
+                    if (htmlContent.includes('No hay estudiantes registrados aún.')) {
+                        listContainer.innerHTML = '';
+                        noStudentsMessage.classList.remove('hidden');
+                    } else {
+                        listContainer.innerHTML = htmlContent;
+                    }
+
+                    // Después de renderizar el HTML, adjuntar los listeners de los botones (solo si es admin)
+                    if(isAdmin) {
+                        handleActions(); 
+                    }
+                } catch (error) {
+                    console.error('Error al cargar la lista de estudiantes:', error);
+                    listContainer.innerHTML = '<p class="text-center p-8 text-red-500">Error al cargar estudiantes. Verifica la conexión con el servidor.</p>';
+                }
+            };
+            
+
+            // --- Lógica del Formulario: Registrar o Actualizar (MODIFICADA) ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Si no es admin, no debe poder enviar el formulario.
+                if (!isAdmin) {
+                    alert('Acceso no autorizado para esta acción.');
+                    return;
+                }
+
+                const id = studentIndexInput.value;
+                const isEditing = id !== '-1';
+                
+                const nombre = document.getElementById('reg-nombre').value.trim();
+                const parada = document.getElementById('reg-parada').value.trim();
+                
+                if (nombre === '' || parada === '') {
+                    alert('Por favor, completa todos los campos.');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('nombre', nombre);
+                formData.append('parada', parada);
+                
+                let endpoint = 'PHP/registrar_estudiante.php';
+                let successMessage = `Estudiante ${nombre} registrado con éxito!`;
+                let actionText = 'Registrando...';
+
+                if (isEditing) {
+                    endpoint = 'PHP/editar_estudiante.php';
+                    formData.append('id', id);
+                    successMessage = `Estudiante ${nombre} actualizado con éxito!`;
+                    actionText = 'Actualizando...';
+                }
+
+
+                const originalButtonText = formButton.textContent;
+                formButton.textContent = actionText;
+                formButton.disabled = true;
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    });
+
+                    // Manejo del error 403 (Acceso no autorizado)
+                    if (response.status === 403) {
+                         const errorResult = await response.json();
+                         alert(`Error de autenticación: ${errorResult.msg}. Por favor, vuelve a iniciar sesión.`);
+                         return;
+                    }
+
+                    const result = await response.json(); 
+                    
+                    if (response.ok && result.ok) {
+                        alert(successMessage);
+                        resetForm(); 
+                        await renderStudents(); 
+                    } else {
+                        alert(`Error: ${result.msg || 'Error desconocido'}`);
+                    }
+                } catch (error) {
+                    console.error('Error en la conexión con el servidor:', error);
+                    alert('Error de red al intentar comunicarse con el servidor.');
+                } finally {
+                    formButton.textContent = originalButtonText;
+                    formButton.disabled = false;
+                }
+            });
+
+            // === LÓGICA DE RESTRICCIÓN DE ACCESO Y LAYOUT MODIFICADO ===
+            const managementGrid = document.getElementById('management-grid');
+            
+            // Si el usuario NO está logueado O NO es Admin, ocultamos el formulario y ajustamos la cuadrícula
+            if (!isLoggedIn || !isAdmin) {
+                formSection.style.display = 'none';
+                managementGrid.classList.remove('md:grid-cols-2');
+                managementGrid.classList.add('md:grid-cols-1');
+            }
+
+            // Cargar datos al inicio
+            renderStudents();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?php
+session_start();
+
+require_once 'Base de datos conexion.php';
+
+
+$pdo = getPDO();
+
+
+$loginPage = 'Login.php';
+$mainPage = 'index.html';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    // --- Validación de Campos ---
+    if ($username === '' || $password === '') {
+        $_SESSION['mensaje'] = 'Por favor, completa el usuario y la contraseña.';
+        header('Location: ' . $loginPage);
+        exit;
+    }
+
+    // --- Autenticación contra la BD ---
+    try {
+        // Buscar el usuario por 'username' (que es el campo único en la BD)
+        $stmt = $pdo->prepare('SELECT id, nombre, password, rol FROM usuarios WHERE username = :u LIMIT 1');
+        $stmt->execute([':u' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            // Usuario no encontrado en la base de datos
+            $_SESSION['mensaje'] = 'Credenciales incorrectas. Verifica tu usuario.';
+            header('Location: ' . $loginPage);
+            exit;
+        }
+
+        // 2. Verificar Contraseña (Usa BCRYPT, como se requiere)
+        if (!password_verify($password, $user['password'])) {
+            $_SESSION['mensaje'] = 'Contraseña incorrecta.';
+            header('Location: ' . $loginPage);
+            exit;
+        }
+  
+
+        // --- Éxito: Establecer Sesión y Redirigir ---
+        // Rellenar variables de sesión compatibles con distintos scripts
+        $_SESSION['is_logged_in'] = true; // compatibilidad antigua
+        $_SESSION['logged_in'] = true;
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['nombre'];
+        $_SESSION['user_role'] = $user['rol'];
+        // Variables usadas por otros scripts en el proyecto
+        $_SESSION['nombre'] = $user['nombre'];
+        $_SESSION['username'] = $username;
+        $_SESSION['rol'] = $user['rol'];
+
+        // Redirigir a la página principal
+        header('Location: ' . $mainPage);
+        exit;
+
+    } catch (Exception $e) {
+        // Fallo de conexión o error en la consulta SQL
+       
+        $_SESSION['mensaje'] = 'Error de sistema al intentar acceder. Intenta más tarde.'; 
+        header('Location: ' . $loginPage);
+        exit;
+    }
+
+} else {
+    // 3. Si se accede directamente por GET, redirigir al formulario de login
+    header('Location: ' . $loginPage);
+    exit;
+}
+?>
